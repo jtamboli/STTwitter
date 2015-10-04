@@ -1110,11 +1110,8 @@ didReceiveResponse:(NSURLResponse *)response
 @implementation NSString (RFC3986)
 - (NSString *)st_stringByAddingRFC3986PercentEscapesUsingEncoding:(NSStringEncoding)encoding {
     
-    NSString *s = (__bridge_transfer NSString *)(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-                                                                                         (CFStringRef)self,
-                                                                                         NULL,
-                                                                                         CFSTR("!*'();:@&=+$,/?%#[]"),
-                                                                                         kCFStringEncodingUTF8));
+    NSString *s = [self stringByAddingPercentEncodingWithAllowedCharacters:
+                   [NSCharacterSet characterSetWithCharactersInString:@"!*'();:@&=+$,/?%#[]"]];
     return s;
 }
 @end
