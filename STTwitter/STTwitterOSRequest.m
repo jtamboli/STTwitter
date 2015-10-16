@@ -23,6 +23,7 @@ typedef void (^stream_block_t)(NSObject<STTwitterRequestProtocol> *request, NSDa
 @property (nonatomic, copy) error_block_t errorBlock;
 @property (nonatomic, copy) upload_progress_block_t uploadProgressBlock;
 @property (nonatomic, copy) stream_block_t streamBlock;
+@property (nonatomic, strong) NSURLSessionConfiguration *sessionConfiguration;
 @property (nonatomic, strong) NSURLSessionDataTask *task;
 @property (nonatomic, strong) NSHTTPURLResponse *httpURLResponse; // only used with streaming API
 @property (nonatomic, strong) NSMutableData *data; // only used with non-streaming API
@@ -36,22 +37,24 @@ typedef void (^stream_block_t)(NSObject<STTwitterRequestProtocol> *request, NSDa
 
 @implementation STTwitterOSRequest
 
-- (instancetype)initWithAPIResource:(NSString *)resource
-                      baseURLString:(NSString *)baseURLString
-                         httpMethod:(NSInteger)httpMethod
-                         parameters:(NSDictionary *)params
-                            account:(ACAccount *)account
-                   timeoutInSeconds:(NSTimeInterval)timeoutInSeconds
-                uploadProgressBlock:(void(^)(int64_t bytesWritten, int64_t totalBytesWritten, int64_t totalBytesExpectedToWrite))uploadProgressBlock
-                        streamBlock:(void(^)(NSObject<STTwitterRequestProtocol> *request, NSData *data))streamBlock
-                    completionBlock:(void(^)(NSObject<STTwitterRequestProtocol> *request, NSDictionary *requestHeaders, NSDictionary *responseHeaders, id response))completionBlock
-                         errorBlock:(void(^)(NSObject<STTwitterRequestProtocol> *request, NSDictionary *requestHeaders, NSDictionary *responseHeaders, NSError *error))errorBlock {
+- (instancetype)initWithSessionConfiguration:(NSURLSessionConfiguration *)sessionConfiguration
+                                 APIResource:(NSString *)resource
+                               baseURLString:(NSString *)baseURLString
+                                  httpMethod:(NSInteger)httpMethod
+                                  parameters:(NSDictionary *)params
+                                     account:(ACAccount *)account
+                            timeoutInSeconds:(NSTimeInterval)timeoutInSeconds
+                         uploadProgressBlock:(void(^)(int64_t bytesWritten, int64_t totalBytesWritten, int64_t totalBytesExpectedToWrite))uploadProgressBlock
+                                 streamBlock:(void(^)(NSObject<STTwitterRequestProtocol> *request, NSData *data))streamBlock
+                             completionBlock:(void(^)(NSObject<STTwitterRequestProtocol> *request, NSDictionary *requestHeaders, NSDictionary *responseHeaders, id response))completionBlock
+                                  errorBlock:(void(^)(NSObject<STTwitterRequestProtocol> *request, NSDictionary *requestHeaders, NSDictionary *responseHeaders, NSError *error))errorBlock {
     
     NSAssert(completionBlock, @"completionBlock is missing");
     NSAssert(errorBlock, @"errorBlock is missing");
     
     self = [super init];
     
+    self.sessionConfiguration = sessionConfiguration;
     self.resource = resource;
     self.baseURLString = baseURLString;
     self.httpMethod = httpMethod;
@@ -107,7 +110,8 @@ typedef void (^stream_block_t)(NSObject<STTwitterRequestProtocol> *request, NSDa
         [self cancel];
     }
     
-    NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSessionConfiguration *sessionConfiguration = self.sessionConfiguration ?:
+                                                        [NSURLSessionConfiguration defaultSessionConfiguration];
     
     NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration
                                                           delegate:self

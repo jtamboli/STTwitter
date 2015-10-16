@@ -198,6 +198,10 @@ static NSDateFormatter *dateFormatter = nil;
     _oauth.timeoutInSeconds = timeoutInSeconds;
 }
 
+- (void)setSessionConfiguration:(NSURLSessionConfiguration *)sessionConfiguration {
+    _oauth.sessionConfiguration = sessionConfiguration;
+}
+
 - (NSString *)prettyDescription {
     NSMutableString *ms = [[_oauth loginTypeDescription] mutableCopy];
     

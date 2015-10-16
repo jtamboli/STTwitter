@@ -152,6 +152,7 @@ authenticateInsteadOfAuthorize:(BOOL)authenticateInsteadOfAuthorize // use NO if
 
 - (void)setTimeoutInSeconds:(NSTimeInterval)timeoutInSeconds; // optional
 
+@property (nonatomic, strong) NSURLSessionConfiguration *sessionConfiguration; // If nil, instantiates new one
 @property (nonatomic, retain) NSString *userName; // set after successful connection for STTwitterOAuth
 @property (nonatomic, retain) NSString *userID; // set after successful connection for STTwitterOAuth
 

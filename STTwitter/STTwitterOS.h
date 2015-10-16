@@ -28,6 +28,8 @@ extern const NSString *STTwitterOSInvalidatedAccount;
 + (instancetype)twitterAPIOSWithAccount:(ACAccount *)account;
 + (instancetype)twitterAPIOSWithFirstAccount;
 
+@property (nonatomic, strong) NSURLSessionConfiguration *sessionConfiguration;
+
 - (NSString *)username;
 - (NSString *)userID;
 

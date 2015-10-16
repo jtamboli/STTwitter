@@ -234,19 +234,20 @@ const NSString *STTwitterOSInvalidatedAccount = @"STTwitterOSInvalidatedAccount"
     
     // https://api.twitter.com/1.1/account/verify_credentials.json
     
-    STTwitterOSRequest *r = [[STTwitterOSRequest alloc] initWithAPIResource:@"/account/verify_credentials.json"
-                                                              baseURLString:@"https://api.twitter.com/1.1"
-                                                                 httpMethod:SLRequestMethodGET
-                                                                 parameters:nil
-                                                                    account:_account
-                                                           timeoutInSeconds:0
-                                                        uploadProgressBlock:nil
-                                                                streamBlock:nil
-                                                            completionBlock:^(id request, NSDictionary *requestHeaders, NSDictionary *responseHeaders, id response) {
-                                                                //
-                                                            } errorBlock:^(id request, NSDictionary *requestHeaders, NSDictionary *responseHeaders, NSError *error) {
-                                                                //
-                                                            }];
+    STTwitterOSRequest *r = [[STTwitterOSRequest alloc] initWithSessionConfiguration:self.sessionConfiguration
+                                                                         APIResource:@"/account/verify_credentials.json"
+                                                                       baseURLString:@"https://api.twitter.com/1.1"
+                                                                          httpMethod:SLRequestMethodGET
+                                                                          parameters:nil
+                                                                             account:_account
+                                                                    timeoutInSeconds:0
+                                                                 uploadProgressBlock:nil
+                                                                         streamBlock:nil
+                                                                     completionBlock:^(id request, NSDictionary *requestHeaders, NSDictionary *responseHeaders, id response) {
+                                                                         //
+                                                                     } errorBlock:^(id request, NSDictionary *requestHeaders, NSDictionary *responseHeaders, NSError *error) {
+                                                                         //
+                                                                     }];
     
     NSURLRequest *preparedURLRequest = [r preparedURLRequest];
     
@@ -302,16 +303,17 @@ const NSString *STTwitterOSInvalidatedAccount = @"STTwitterOSInvalidatedAccount"
         baseURLStringWithTrailingSlash = [baseURLString stringByAppendingString:@"/"];
     }
     
-    STTwitterOSRequest *r = [[STTwitterOSRequest alloc] initWithAPIResource:resource
-                                                              baseURLString:baseURLStringWithTrailingSlash
-                                                                 httpMethod:slRequestMethod
-                                                                 parameters:d
-                                                                    account:_account
-                                                           timeoutInSeconds:_timeoutInSeconds
-                                                        uploadProgressBlock:uploadProgressBlock
-                                                                streamBlock:progressBlock
-                                                            completionBlock:successBlock
-                                                                 errorBlock:errorBlock];
+    STTwitterOSRequest *r = [[STTwitterOSRequest alloc] initWithSessionConfiguration:self.sessionConfiguration
+                                                                         APIResource:resource
+                                                                       baseURLString:baseURLStringWithTrailingSlash
+                                                                          httpMethod:slRequestMethod
+                                                                          parameters:d
+                                                                             account:_account
+                                                                    timeoutInSeconds:_timeoutInSeconds
+                                                                 uploadProgressBlock:uploadProgressBlock
+                                                                         streamBlock:progressBlock
+                                                                     completionBlock:successBlock
+                                                                          errorBlock:errorBlock];
     [r startRequest];
     
     return r;
